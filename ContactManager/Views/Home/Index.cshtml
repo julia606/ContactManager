@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Contact Manager";
+}
+
+<h2>Upload File</h2>
+<form method="post" enctype="multipart/form-data" action="@Url.Action("Index", "Home")">
+    <div class="form-group">
+        <label for="fileInput">Завантажити CSV файл:</label>
+        <input type="file" id="fileInput" name="csvFile" accept=".csv">
+    </div>
+    <button type="submit" class="btn btn-primary">Завантажити</button>
+</form>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <div class="alert alert-info mt-3">
+        @ViewBag.Message
+    </div>
+}
