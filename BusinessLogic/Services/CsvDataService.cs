@@ -1,12 +1,7 @@
 ﻿using CsvHelper.Configuration;
 using CsvHelper;
 using DataAccess.Entities;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BusinessLogic.EFUnitOfWork;
 using Microsoft.AspNetCore.Http;
 
@@ -20,40 +15,17 @@ namespace BusinessLogic.Services
 
         public List<UserData> GetUsersFromCsvFile(IFormFile file)
         {
-            var users = new List<UserData>();
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            config.MissingFieldFound = null;
 
             using (var streamReader = new StreamReader(file.OpenReadStream()))
-            using (var csv = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)))
+            using (var csv = new CsvReader(streamReader, config))
             {
                 csv.Read();
                 csv.ReadHeader();
-
-                while (csv.Read())
-                {
-                    var user = new UserData();
-
-                    user.Id = Guid.NewGuid();
-
-                    if (csv.TryGetField("Name", out string? name))
-                    {
-                        user.Name = name;
-                    }
-
-                    if (csv.TryGetField("Date of birth", out string? dateOfBirth))
-                        user.DateOfBirth = DateTime.Parse(dateOfBirth);
-                    if (csv.TryGetField("Married", out string? isMarried))
-                        user.Married = bool.Parse(isMarried);
-                    if (csv.TryGetField("Phone", out string? phone))
-                        user.Phone = phone;
-                    if (csv.TryGetField("Salary", out string salary))
-                        user.Salary = decimal.Parse(salary);
-
-                    users.Add(user);
-                }
+                csv.Context.RegisterClassMap<UserDataMap>();
+                return csv.GetRecords<UserData>().ToList();
             }
-
-            return users;
-
         }
         public void UploadDataToDatabase(IEnumerable<UserData> users)
         {
@@ -70,6 +42,18 @@ namespace BusinessLogic.Services
         {
             var repository = _unitOfWork.GetRepository<UserData>();
             return repository.GetAll().ToList();
+        }
+    }
+
+    public class UserDataMap : ClassMap<UserData>
+    {
+        public UserDataMap()
+        {
+            Map(m => m.Name).Name("Name");
+            Map(m => m.DateOfBirth).Name("Date of birth").TypeConverterOption.Format("dd.MM.yyyy");
+            Map(m => m.Married).Name("Married").TypeConverterOption.BooleanValues(true, false);
+            Map(m => m.Phone).Name("Phone");
+            Map(m => m.Salary).Name("Salary").TypeConverterOption.NumberStyles(NumberStyles.Currency);
         }
     }
 }

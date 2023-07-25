@@ -11,18 +11,14 @@ namespace BusinessLogic.EFUnitOfWork
 {
     public class UnitOfWork
     {
-        private AppDbContext context;
+        private readonly AppDbContext _context;
         public UnitOfWork()
         {
-            context = new AppDbContext();
+            _context = new AppDbContext();
         }
         public Repository<T>? GetRepository<T>() where T : class
         {
-            return new Repository<T>(context);
-        }
-        public void Save()
-        {
-            context.SaveChanges();
+            return new Repository<T>(_context);
         }
     }
 }

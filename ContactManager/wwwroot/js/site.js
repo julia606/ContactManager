@@ -9,8 +9,6 @@ $(document).ready(function () {
 function initTable() {
     dataTable = new DataTable('#userTable', {
         order: [[1, 'desc']],
-        paging: false,      
-        lengthChange: false, 
         info: false         
     });
 

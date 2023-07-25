@@ -12,7 +12,7 @@ namespace BusinessLogic.Repositories
 {
     public class Repository<T> where T : class
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
         public Repository(AppDbContext dbContext)
         {
             _context = dbContext;
