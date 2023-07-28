@@ -12,7 +12,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resourses", "Resourses", "{6E1A5E51-B171-4CF8-B43B-257DD84018FE}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\..\Desktop\file.csv = ..\..\..\Desktop\file.csv
-		..\..\..\UsersDB.mdf = ..\..\..\UsersDB.mdf
 	EndProjectSection
 EndProject
 Global

@@ -23,15 +23,15 @@ namespace ContactManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(IFormFile csvFile)
+        public async Task<IActionResult> Index(IFormFile csvFile)
         {
             if (csvFile == null || csvFile.Length == 0)
             {
                 ViewBag.Message = "Виберіть файл для завантаження.";
                 return View();
             }
-            var users = _dataService.GetUsersFromCsvFile(csvFile);
-            _dataService.UploadDataToDatabase(users);
+            var users = await _dataService.GetUsersFromCsvFile(csvFile);
+            await _dataService.UploadDataToDatabase(users);
 
             ViewBag.Message = "Файл успішно завантажено.";
             return View();

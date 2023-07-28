@@ -17,38 +17,39 @@ namespace BusinessLogic.Repositories
         {
             _context = dbContext;
         }
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public T Get(int id)
+        public async Task<T> GetAsync(int id)
         {
-            return _context.Set<T>().Find(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
-        public void Create(T entity)
+        public async Task CreateAsync(T entity)
         {
-            var addedEntity = _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            var addedEntity = await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
-            var updatedEntity = _context.Set<T>().Update(entity);
-            _context.SaveChanges();
+            var updatedEntity =  _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var entity = this.Get(id);
-            this.Delete(entity);
+            var entityToDelete = await _context.Set<T>().FindAsync(id);
+            var deleted = _context.Set<T>().Remove(entityToDelete);
+            await _context.SaveChangesAsync();
 
         }
-        public void Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
             var deletedEntity = _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
     }

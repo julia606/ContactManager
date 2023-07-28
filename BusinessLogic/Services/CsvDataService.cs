@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
         {
         }
 
-        public List<UserData> GetUsersFromCsvFile(IFormFile file)
+        public async Task<List<UserData>> GetUsersFromCsvFile(IFormFile file)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
             config.MissingFieldFound = null;
@@ -27,33 +27,21 @@ namespace BusinessLogic.Services
                 return csv.GetRecords<UserData>().ToList();
             }
         }
-        public void UploadDataToDatabase(IEnumerable<UserData> users)
+        public async Task UploadDataToDatabase(IEnumerable<UserData> users)
         {
             foreach(var user in users)
             {
                var repository =  _unitOfWork.GetRepository<UserData>();
                 if(repository != null)
                 {
-                    repository.Create(user);
+                   await repository.CreateAsync(user);
                 }
             }
         }
-        public List<UserData> GetUsersFromDB()
+        public async Task<List<UserData>> GetUsersFromDB()
         {
             var repository = _unitOfWork.GetRepository<UserData>();
-            return repository.GetAll().ToList();
-        }
-    }
-
-    public class UserDataMap : ClassMap<UserData>
-    {
-        public UserDataMap()
-        {
-            Map(m => m.Name).Name("Name");
-            Map(m => m.DateOfBirth).Name("Date of birth").TypeConverterOption.Format("dd.MM.yyyy");
-            Map(m => m.Married).Name("Married").TypeConverterOption.BooleanValues(true, false);
-            Map(m => m.Phone).Name("Phone");
-            Map(m => m.Salary).Name("Salary").TypeConverterOption.NumberStyles(NumberStyles.Currency);
+            return (List<UserData>)await repository.GetAllAsync();
         }
     }
 }

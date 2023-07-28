@@ -11,9 +11,9 @@ namespace ContactManager.Controllers
         {
             _dataService = dataService;
         }
-        public IActionResult AllContacts()
+        public async Task<IActionResult> AllContacts()
         {
-            var listOfUser = _dataService.GetUsersFromDB();
+            var listOfUser = await _dataService.GetUsersFromDB();
             return View(listOfUser);
         }
 
