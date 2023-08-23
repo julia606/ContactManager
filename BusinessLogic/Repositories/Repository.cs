@@ -22,7 +22,7 @@ namespace BusinessLogic.Repositories
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetAsync(int id)
+        public async Task<T> GetAsync(Guid id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
@@ -39,7 +39,7 @@ namespace BusinessLogic.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var entityToDelete = await _context.Set<T>().FindAsync(id);
             var deleted = _context.Set<T>().Remove(entityToDelete);

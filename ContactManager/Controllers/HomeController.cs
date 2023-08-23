@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Services;
 using ContactManager.Models;
 using DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
